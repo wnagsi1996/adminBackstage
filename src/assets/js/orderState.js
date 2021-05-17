@@ -1,0 +1,216 @@
+//客户订单管理中订单状态
+export const clientOrderState=[
+	{
+		text:'等待提交审核',
+		value:'0'
+	},
+	{
+		text:'等待财务审核',
+		value:'1'
+	},
+	{
+		text:'测评操作中',
+		value:'2'
+	},
+	{
+		text:'财务审核不通过',
+		value:'3'
+	},
+	{
+		text:'测评结束',
+		value:'4'
+	},
+	{
+		text:'等待财务处理补退差价',
+		value:'5'
+	},
+	{
+		text:'退单等待财务退款',
+		value:'6'
+	},
+	{
+		text:'退单成功',
+		value:'7'
+	}
+]
+
+//子订单状态
+export const orderState=[
+	{
+		text:'全部',
+		value:''
+	},
+	{
+		text:'等待放单',
+		value:'0'
+	},
+	{
+		text:'等待接单',
+		value:'1'
+	},
+	{
+		text:'已接单',
+		value:'2'
+	},
+	{
+		text:'下单待审核',
+		value:'3'
+	},
+	{
+		text:'确认已下单',
+		value:'4'
+	},
+	{
+		text:'审核未下单',
+		value:'5'
+	},
+	{
+		text:'等待返款',
+		value:'8'
+	},
+	{
+		text:'已返款',
+		value:'9'
+	},
+	{
+		text:'退单等待财务退款',
+		value:'10'
+	},
+	{
+		text:'退单成功',
+		value:'11'
+	},
+	{
+		text:'返款被驳回',
+		value:'12'
+	}
+]
+
+//财务订单类型
+export const cwOrderType=[
+	{
+		text:'全部',
+		value:''
+	},
+	{
+		text:'接单收款',
+		value:'0'
+	},
+	{
+		text:'产品费返款',
+		value:'3'
+	},
+	{
+		text:'退补差价',
+		value:'4'
+	},
+	{
+		text:'佣金返款',
+		value:'5'
+	},
+	{
+		text:'追加订单收款',
+		value:'6'
+	},
+	{
+		text:'退单退款',
+		value:'7,8'
+	},
+	{
+		text:'卖家付款',
+		value:'9'
+	}
+]
+
+export const cwOrderState=[
+	{
+		text:'全部',
+		value:'-1'
+	},
+	{
+		text:'待处理',
+		value:'0'
+	},
+	{
+		text:'已处理(确认)',
+		value:'1'
+	},
+	{
+		text:'驳回(退回)',
+		value:'2'
+	},
+	{
+		text:'自动还款中',
+		value:'3'
+	},
+	{
+		text:'自动还款失败',
+		value:'4'
+	}
+]
+
+//货币类型
+export const currencyType=[
+	{
+		text:'全部',
+		value:'-1'
+	},
+	{
+		text:'人民币',
+		value:'0'
+	},
+	{
+		text:'美元',
+		value:'1'
+	}
+]
+
+export const orderCategory=[
+	{
+		text:'全部',
+		value:'-1'
+	},
+	{
+		text:'收款',
+		value:'0'
+	},
+	{
+		text:'付款',
+		value:'1'
+	}
+]
+//收款渠道
+export const paymentType=[
+	{
+		text:'微信',
+		value:'0'
+	},
+	{
+		text:'支付宝',
+		value:'1'
+	},
+	{
+		text:'银行转账',
+		value:'2'
+	},
+	{
+		text:'PyaPal',
+		value:'3'
+	}
+]
+
+//订单类型
+export const orderType=[
+	{
+		text:'全部',
+		value:'-1'
+	},
+	{
+		text:'免评单',
+		value:'0'
+	},
+	{
+		text:'留评单',
+		value:'1'
+	}
+]
