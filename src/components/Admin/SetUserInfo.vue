@@ -122,14 +122,17 @@
 					this.$api.getCPUserInfo({userid}).then(res=>{
 						Object.assign(this.user,res);
 					}).catch(xhr=>{
-						this.$message({
-							type: 'warning',
-							message: '获取用户信息失败!'
-						});
+						this.$message.warning('获取用户信息失败!')
 					})
-					this.user.pass=this.user.pass1="1"
+					this.user={
+						pass:'1',
+						pass1:'1'
+					}
 				}else{
-					this.user.pass=this.user.pass1=""
+					this.user={
+						pass:'',
+						pass1:''
+					}
 				}
 			},
 			// 提交
@@ -154,24 +157,15 @@
 								if(pass!='' && pass1!=''){
 									this.createAccount(uid,pass,pass1)
 								}else{
-									this.$message({
-										type: 'warning',
-										message: '创建加密数据失败!'
-									});
+									this.$message.warning('创建加密数据失败!')
 									this.btnLoading=false;
 								}
 							}else{
-								this.$message({
-									type: 'warning',
-									message: '创建加密数据失败!'
-								});
+								this.$message.warning('创建加密数据失败!')
 								this.btnLoading=false;
 							}
 						}).catch(xhr=>{
-							this.$message({
-								type: 'warning',
-								message: '创建加密数据失败!'
-							});
+							this.$message.warning('创建加密数据失败!')
 							this.btnLoading=false;
 						})
 					}
@@ -194,24 +188,15 @@
 				}).then(res=>{
 					//console.log(res);
 					if(res.rescode==1){
-						this.$message({
-							type: 'success',
-							message:res.resdesc
-						});
-						this.$emit('dialogUserInfoToggle');
+						this.$message.success(res.resdesc)
+						this.$emit('dialogUserInfoToggle',true);
 					}else{
-						this.$message({
-							type: 'warning',
-							message:res.resdesc
-						});
+						this.$message.warning(res.resdesc)
 					}
 					this.btnLoading=false;
 				}).catch(err=>{
 					//console.log(xhr);
-					this.$message({
-						type: 'warning',
-						message:'员工账号创建出错'
-					});
+					this.$message.warning('员工账号创建出错')
 					this.btnLoading=false;
 				})
 			},

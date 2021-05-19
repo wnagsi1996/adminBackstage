@@ -104,10 +104,7 @@
 				  if (valid) {
 					  let {account,imgsrc,name,contact,remark,channel}=this.agent;
 					  if(account=="" && imgsrc=="" ){
-						  this.$message({
-						  	type: 'warning',
-						  	message: '收款账户或二维码不能都为空!'
-						  });
+						  this.$message.warning('收款账户或二维码不能都为空!')
 					  }else{
 						  this.btnLoading=true;
 						  if(this.zjid==''){
@@ -121,25 +118,16 @@
 							  }).then(res=>{
 							  	//console.log(res);
 							  	if(res.data>0){
-							  		this.$message({
-							  			type: 'success',
-							  			message:'中介创建成功'
-							  		});
-							  		this.$emit('dialogAgentinfoToggle');
+									this.$message.success('中介创建成功')
+							  		this.$emit('dialogAgentinfoToggle',true);
 							  		this.resetForm();
 							  	}else{
-							  		this.$message({
-							  			type: 'warning',
-							  			message:'中介创建出错'
-							  		});
+									this.$message.warning('中介创建出错')
 							  	}
 							  	this.btnLoading=false;
 							  }).catch(xhr=>{
 							  	//console.log(xhr);
-							  	this.$message({
-							  		type: 'warning',
-							  		message:'中介创建出错'
-							  	});
+							  	this.$message.warning('中介创建出错')
 							  	this.btnLoading=false;
 							  })
 						  }else{
@@ -155,25 +143,16 @@
 							  }).then(res=>{
 							  	//console.log(res);
 							  	if(res>0){
-							  		this.$message({
-							  			type: 'success',
-							  			message:'中介编辑成功'
-							  		});
+									this.$message.success('中介编辑成功')
 							  		this.$emit('dialogAgentinfoToggle');
 							  		this.resetForm();
 							  	}else{
-							  		this.$message({
-							  			type: 'warning',
-							  			message:'中介编辑出错'
-							  		});
+									this.$message.warning('中介编辑出错')
 							  	}
 							  	this.btnLoading=false;
 							  }).catch(xhr=>{
 							  	//console.log(xhr);
-							  	this.$message({
-							  		type: 'warning',
-							  		message:'中介编辑出错'
-							  	});
+							  	this.$message.warning('中介编辑出错')
 							  	this.btnLoading=false;
 							  })
 						  }

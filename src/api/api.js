@@ -125,6 +125,10 @@ const api={
 	addUserPlant(params={}){
 		return get('/Handler/CPManageSystem.ashx?cmd=addUserPlant',params)
 	},
+	//编辑月份目标
+	editUserPlant(params={}){
+		return get('/Handler/CPManageSystem.ashx?cmd=editUserPlant',params)
+	},
 	//用户列表
 	getCPUserList(params={}){
 		return get('/Handler/CPManageSystem.ashx?cmd=getCPUserList',params)
@@ -530,6 +534,10 @@ const api={
 	},
 	//财务月份数据汇总2
 	getCWTotalMonthData2(params={}){
+		return get('/Handler/CPManageSystem.ashx?cmd=getCWTotalMonthData2',params)
+	},
+	//显示补退差价
+	getSCOrderListBT(params={}){
 		return get('/Handler/CPManageSystem.ashx?cmd=getCWTotalMonthData2',params)
 	}
 	

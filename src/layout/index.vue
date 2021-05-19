@@ -126,9 +126,6 @@
 				themeColor:themeColor    //主题配色
 			}
 		},
-		created() {
-			
-		},
 		methods:{
 			//切换侧边栏状态
 			targetIcon(bool){

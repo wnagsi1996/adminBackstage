@@ -59,10 +59,33 @@
 				 </el-col>
 			</el-row>
 			
-			<!-- 本月折线图 -->
-			<div class="month-line public-statue">
-				<ve-line v-if='Object.keys(monthLineData).length > 0' :data="monthLineData" class="line"></ve-line>
-			</div>
+			
+			<el-row>
+				<el-col :span="20">
+					<!-- 本月折线图 -->
+					<div class="month-line public-statue">
+						<ve-line v-if='Object.keys(monthLineData).length > 0' :data="monthLineData" class="line"></ve-line>
+					</div>	
+				</el-col>
+				<el-col :span="4">
+					<div class="month-line public-statue">
+						<div class="buyer-order-desc">
+							<h4>本月刷单</h4>
+							<ul>
+								<li><span>中介：</span><span>免:10/留:0</span></li>
+								<li><span>个人：</span><span>免:10/留:0</span></li>
+							</ul>
+							<h4 class="back">本月退单</h4>
+							<ul>
+								<li><span>中介：</span><span>免:10/留:0</span></li>
+								<li><span>个人：</span><span>免:10/留:0</span></li>
+							</ul>
+						</div>
+					</div>
+				</el-col>
+			</el-row>
+				
+			
 			
 			<!-- 五个模块的汇总数据 -->
 			<div class="total-summary" v-if="Object.keys(totalDataInfo).length > 0">
@@ -729,4 +752,10 @@
 
 <style>
 	@import url("../../../../assets/css/summary.css");
+	.buyer-order-desc h4{font-size: 16px;font-weight: normal;}
+	.buyer-order-desc h4.back{margin-top: 28px;}
+	.buyer-order-desc ul{margin-top: 8px;}
+	.buyer-order-desc ul li{padding: 8px 0; display: flex;align-items: initial;}
+	.buyer-order-desc ul li span{flex: 1;}
+	.buyer-order-desc ul li span:last-child{text-align: right;color: #666;}
 </style>

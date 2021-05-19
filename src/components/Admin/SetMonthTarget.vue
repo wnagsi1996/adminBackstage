@@ -116,10 +116,7 @@
 						this.statusID=0
 					}
 				}catch(e){
-					this.$message({
-						type:'warning',
-						message:'获取用户出错'
-					})
+					this.$message.warning('获取用户出错')
 				}
 			},
 			//创建月份目标
@@ -128,52 +125,43 @@
 				  if (valid) {
 					this.btnLoading=true;
 					if(this.rid==''){ //创建月份目标
+						let {monthly,ordernum,user}=this.aims;
 						this.$api.addUserPlant({
-							"month":this.aims.monthly,
+							"month":monthly,
 							"usertype":this.statusID,
-							"plantnum":this.aims.ordernum,
-							"userid":this.aims.user
+							"plantnum":ordernum,
+							"userid":user
 						}).then(res=>{
 							if(res>0){
-								this.$message({
-									type: 'success',
-									message:'设置成功'
-								});
-								this.$emit('dialogMonthToggle');
+								this.$message.success('创建成功')
+								this.$emit('dialogMonthToggle',true);
 								this.resetForm();
 								this.rid='';
 							}else{
-								this.$message({
-									type: 'warning',
-									message:'设置失败'
-								});
+								this.$message.warning('创建失败')
 							}
 							this.btnLoading=false;
+						}).catch(err=>{
+							this.$message.warning('创建失败')
 						})
 					}else{  //编辑月份目标
-						this.axios.get("/Handler/CPManageSystem.ashx?cmd=editUserPlant",{
-							params:{
-								"month":this.aims.monthly,
-								"plantnum":this.aims.ordernum,
-								"rid":this.rid
-							}
+						let {monthly,ordernum}=this.aims;
+						this.$api.editUserPlant({
+							"month":monthly,
+							"plantnum":ordernum,
+							"rid":this.rid
 						}).then(res=>{
 							if(res>0){
-								this.$message({
-									type: 'success',
-									message:'编辑成功'
-								});
+								this.$message.success('编辑成功')
 								this.resetForm();
-								this.$emit('dialogMonthToggle');
+								this.$emit('dialogMonthToggle',true);
 								this.rid='';
 							}else{
-								this.$message({
-									type: 'warning',
-									message:'编辑失败'
-								});
+								this.$message.warning('编辑失败')
 							}
 							this.btnLoading=false;
-							
+						}).catch(err=>{
+							this.$message.warning('编辑失败')
 						})
 					}
 				  } else {
@@ -191,11 +179,13 @@
 			//判断是否编辑还是创建
 			ifRID(val){
 				if(Object.keys(val).length>0){
-					this.aims.ordernum=val.plantnum;
-					this.aims.monthly=val.month;
 					this.rid=val.rid;  
-					this.aims.status='1';  //随便填写无意义，为了不让表格检索出错
-					this.aims.user='1';  //随便填写无意义，为了不让表格检索出错
+					this.aims={
+						ordernum:val.plantnum,
+						monthly:val.month,
+						status:'1',//随便填写无意义，为了不让表格检索出错
+						user:'1'//随便填写无意义，为了不让表格检索出错
+					}
 					
 				}else{
 					this.rid='';

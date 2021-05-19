@@ -167,10 +167,8 @@
 							monthCdMpNum += item.cdmpnum;
 							monthCdLpNum += item.cdlpnum;
 
-							let date = item.day.slice(5);
-
 							LineRow.push({
-								"日期": date,
+								"日期": item.day.slice(5),
 								"接单": item.jdmpnum + item.jdlpnum,
 								"卖家退单": item.tdmpnum + item.tdlpnum,
 								"刷单": item.sdmpnum + item.sdlpnum,

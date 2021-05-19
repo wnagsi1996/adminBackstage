@@ -44,7 +44,6 @@
 			    menuText: "#ffffff",  // "#bfcbd9"
 			    menuActiveText: "#ffffff",
 			    menuBg:  "#001529"
-			   
 			  };
 			}
 		},
@@ -55,7 +54,7 @@
 		},
 		watch:{
 		},
-		mounted() {
+		created() {
 			this.getmenudata();
 			let routerPath=this.$route;
 			this.permission_routes.forEach(item=>{

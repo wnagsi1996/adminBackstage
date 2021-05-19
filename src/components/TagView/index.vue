@@ -27,12 +27,6 @@ export default {
 	components:{
 		[Tag.name]:Tag
 	},
-  computed: {
-    // ...mapState({
-    //   tags: state => state.tabsList
-    // })
-	
-  },
   mounted() {
   	this.tags=this.$store.state.tagsView.tabsList;
 	

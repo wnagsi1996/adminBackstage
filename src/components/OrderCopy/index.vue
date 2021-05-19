@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<p>{{this.ordernodata | ordernofilter}} <i class='el-icon-document-copy' @click="copyorderno()"></i></p>
+		<p>{{this.orderno | ordernofilter}} <i class='el-icon-document-copy' @click="copyorderno()"></i></p>
 	</div>
 </template>
 
@@ -13,28 +13,16 @@
 				default:''
 			}
 		},
-		data(){
-			return{
-				ordernodata:''
-			}
-		},
-		mounted(){
-			
-			this.ordernodata=this.orderno;
-		},
 		methods:{
 			//拷贝订单号
 			copyorderno(){
 				 let oInput = document.createElement('input');
-				oInput.value = this.ordernodata;
+				oInput.value = this.orderno;
 				document.body.appendChild(oInput);
 				oInput.select(); // 选择对象;
 				//console.log(oInput.value)
 				document.execCommand("Copy"); // 执行浏览器复制命令
-				this.$message({
-				  message: '复制成功',
-				  type: 'success'
-				});
+				this.$message.success('复制成功')
 				oInput.remove()
 			}
 		},
@@ -47,11 +35,6 @@
 					return first+"..."+last;
 				}
 				return value;
-			}
-		},
-		watch:{
-			orderno(newVal,oldVal){
-				this.ordernodata=newVal;
 			}
 		}
 	})

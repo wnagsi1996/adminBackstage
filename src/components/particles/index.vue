@@ -14,7 +14,7 @@
 				
 			}
 		},
-		mounted() {
+		created() {
 			this.init();
 		},
 		methods:{

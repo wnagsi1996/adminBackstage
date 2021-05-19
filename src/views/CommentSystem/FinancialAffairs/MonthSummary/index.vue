@@ -259,7 +259,7 @@
 		methods:{
 			getdata1(month){
 				this.$api.getCWTotalMonthData1({month}).then(data=>{
-					console.log(res);
+					// console.log(res);
 					//本月数据
 					this.monthOrderData=[  
 						{  
@@ -495,7 +495,7 @@
 				if(this.selerAllUserInfo[rid]!=undefined){
 					this.selerUserInfoData(this.selerAllUserInfo[rid]);
 				}else{
-					this.$api.getMJMonthCPOrderDetailNums({userid:rid,rid:this.month}).then(res=>{
+					this.$api.getMJMonthCPOrderDetailNums({userid:rid,month:this.month}).then(res=>{
 						if(res!=''){
 							this.selerAllUserInfo[rid]=res.monthViews;
 							this.selerUserInfoData(res.monthViews);
@@ -564,11 +564,14 @@
 			},
 			//获取买家端用户列表
 			getBuyerUser(newpagination){
-				this.pagination={
-					index:newpagination.index,
-					size:newpagination.size
+				if(newpagination){
+					this.buyerpagination={
+						index:newpagination.index,
+						size:newpagination.size
+					}
 				}
-				let {index,size}=this.pagination;
+				
+				let {index,size}=this.buyerpagination;
 				this.$api.getMMJUserList({pageindex:index,len:size}).then(res=>{
 					if(res!=''){
 						this.buyerUserList=res;

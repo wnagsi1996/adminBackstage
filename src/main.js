@@ -2,18 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
-// import qs from 'qs'
-// import axios from 'axios';
 import {IsPC} from '@/utils/PublicFn'  //引入判断PC手机得函数
 const ispc=IsPC()
 
 Vue.config.productionTip=false;
-// Vue.prototype.axios=axios
-// Vue.prototype.qs=qs
-// let curUrl=''
-// let devUrl='/Handler'
-// process.env.NODE_ENV==='development' ? curUrl=devUrl: curUrl; 
-// axios.defaults.baseURL=curUrl;
 
 
 import {Button,Message,Loading,MessageBox,Notification} from 'element-ui'

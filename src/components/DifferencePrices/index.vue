@@ -35,17 +35,21 @@
 				results:0
 			}
 		},
-		mounted() {
+		created() {
 			this.gettabledata();
 		},
 		methods:{
 			gettabledata(){
 				this.loading=true
-				this.axios.get("/Handler/CPManageSystem.ashx?cmd=getSCOrderListBT&pageindex=0&len=50&orderno="+this.orderno).then(res=>{
+				this.$api.getSCOrderListBT({
+					pageindex:0,
+					len:50,
+					orderno:this.orderno
+				}).then(res=>{
 					//console.log(res);
-					this.tableData=res.data.rows;
-					this.summary=res.data.summary;
-					this.results=res.data.results
+					this.tableData=res.rows;
+					this.summary=res.summary;
+					this.results=res.results
 					this.loading=false
 				}).catch(xhr=>{
 					console.log(xhr);
