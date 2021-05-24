@@ -1,4 +1,3 @@
-import { loginInfo } from '@/utils/login.js'
 import { Message } from 'element-ui'
  import router from '@/router/index.js'
 import api from '@/api/api.js'
@@ -51,7 +50,7 @@ const actions = {
     // 获取用户角色信息
     getInfo({ commit, state }){
 		return new Promise((resolve,reject) => {
-			loginInfo('/Handler/ManageHandler.ashx?cmd=getMenuConfig&ifMobile=0').then(res=>{
+			api.getMenuConfig({ifMobile:0}).then(res=>{
 				//console.log(res);
 				let menuId=[];
 				if(res!=''){
@@ -85,29 +84,26 @@ const actions = {
 	
     // 重置令牌
     resetToken({ commit }){
-        return new Promise(resolve => {
-			return new Promise((resolve,reject) => {
-				loginInfo('/Handler/WebHandler.ashx?cmd=logout').then(res=>{console.log(res);
-					if (res.rescode == "0"){
-						console.log("退出登录成功")
-						commit('SET_TOKEN','')
-						commit('SET_ROLES',[])
-						commit('SET_ACCOUNT',[])
-						commit('permission/DEL_ROUTES','',{root: true})
-						commit('tagsView/closeAll','',{root: true})
-						window.sessionStorage.removeItem('token');
-						router.push({path:'/login'})
-						resolve()
-					}else{
-						console.log(res.resdesc)
-						reject('退出登录出错')
-					}
-				}).catch(xhr=>{console.log(xhr);
-					 reject(xhr)
-				})
+		return new Promise((resolve,reject) => {
+			api.logout().then(res=>{
+				if (res.rescode == "0"){
+					console.log("退出登录成功")
+					commit('SET_TOKEN','')
+					commit('SET_ROLES',[])
+					commit('SET_ACCOUNT',[])
+					commit('permission/DEL_ROUTES','',{root: true})
+					commit('tagsView/closeAll','',{root: true})
+					window.sessionStorage.removeItem('token');
+					router.push({path:'/login'})
+					resolve()
+				}else{
+					console.log(res.resdesc)
+					reject('退出登录出错')
+				}
+			}).catch(xhr=>{console.log(xhr);
+				 reject(xhr)
 			})
-            
-        })
+		})
     }
 }
 

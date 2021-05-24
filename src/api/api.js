@@ -5,6 +5,14 @@ const api={
 	login(params={}){
 		return get('/Handler/WebHandler.ashx?cmd=Login',params)
 	},
+	//退出登录
+	logout(){
+		return get('/Handler/WebHandler.ashx?cmd=logout')
+	},
+	//获取用户角色信息
+	getMenuConfig(params){
+		return get('/Handler/ManageHandler.ashx?cmd=getMenuConfig',params)
+	},
 	//加密
 	rsaKey(){
 		return get('/Handler/RSAKey.ashx?cmd=CreateRSAKey');

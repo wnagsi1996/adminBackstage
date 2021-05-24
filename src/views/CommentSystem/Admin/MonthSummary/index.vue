@@ -45,6 +45,32 @@
 					</div>
 				</div>
 			</el-col>
+			<el-col :span="4">
+				<div class="one-today public-statue">
+					<div class="today-title">
+						<h5>当月刷单</h5>
+					</div>
+					<div class="today-desc">
+						<div class="sd-detail" v-if="orderinfo.length>0">
+							<TitleAndInfo :list="orderinfo[0]"></TitleAndInfo>
+							<TitleAndInfo :list="orderinfo[1]"></TitleAndInfo>
+						</div>
+					</div>
+				</div>
+			</el-col>
+			<el-col :span="4">
+				<div class="one-today public-statue">
+					<div class="today-title">
+						<h5>当月退单</h5>
+					</div>
+					<div class="today-desc">
+						<div class="sd-detail" v-if="orderinfo.length>0">
+							<TitleAndInfo :list="orderinfo[2]"></TitleAndInfo>
+							<TitleAndInfo :list="orderinfo[3]"></TitleAndInfo>
+						</div>
+					</div>
+				</div>
+			</el-col>
 		</el-row>
 		<!-- 折线图 -->
 		<div class="month-line public-statue">
@@ -72,6 +98,7 @@
 	import UserMonthInfo from '@/components/AdminHome/UserMonthInfo.vue'
 	import OrderModule from '@/components/AdminHome/OrderModule.vue'
 	import VeLine from 'v-charts/lib/line'
+	import TitleAndInfo from '@/components/TitleAndInfo'
 	import {
 		Row,
 		Col,
@@ -87,11 +114,13 @@
 			[DatePicker.name]: DatePicker,
 			[Progress.name]: Progress,
 			OrderModule,
-			UserMonthInfo
+			UserMonthInfo,
+			TitleAndInfo
 		},
 		data() {
 			return {
 				month: '',
+				orderinfo:[],//月份中介非中介订单详情
 				summaryOrderData: [], //本月汇总数据
 				summarytotalData: [], //目标汇总
 				monthLineData: {}, //月份折线图数据
@@ -150,7 +179,11 @@
 						monthTdMpNum = 0,
 						monthTdLpNum = 0,
 						monthCdMpNum = 0,
-						monthCdLpNum = 0;
+						monthCdLpNum = 0,
+						monthCdLpNum_zj=0,
+						monthCdMpNum_zj=0,
+						monthSdLpNum_zj=0,
+						monthSdMpNum_zj=0;
 
 					//月份折线图数据
 					let LineColumns = ['日期', '接单', '卖家退单', '刷单', '买家退单']; //折线图标题
@@ -166,6 +199,10 @@
 							monthTdLpNum += item.tdlpnum;
 							monthCdMpNum += item.cdmpnum;
 							monthCdLpNum += item.cdlpnum;
+							monthCdLpNum_zj += item.cdlpnum_zj;
+							monthCdMpNum_zj += item.cdmpnum_zj;
+							monthSdLpNum_zj += item.sdlpnum_zj;
+							monthSdMpNum_zj += item.sdmpnum_zj;
 
 							LineRow.push({
 								"日期": item.day.slice(5),
@@ -219,6 +256,38 @@
 							'SelerPercentage': (((monthJdLpNum + monthJdMpNum) - (monthTdLpNum + monthTdMpNum)) / BuyermonthAims * 100)
 								.toFixed(2)
 						});
+						
+						this.orderinfo=[
+							{
+								name:'中介刷单',
+								desc:[
+									{text:'免评',value:monthSdMpNum_zj},
+									{text:'留评',value:monthSdLpNum_zj},
+								]
+							},
+							{
+								name:'个人刷单',
+								desc:[
+									{text:'免评',value:monthSdMpNum-monthSdMpNum_zj},
+									{text:'留评',value:monthSdLpNum-monthSdLpNum_zj},
+								]
+							},
+							{
+								name:'中介退单',
+								desc:[
+									{text:'免评',value:monthCdMpNum_zj},
+									{text:'留评',value:monthCdLpNum_zj},
+								]
+							},
+							{
+								name:'个人退单',
+								desc:[
+									{text:'免评',value:monthCdMpNum-monthCdMpNum_zj},
+									{text:'留评',value:monthCdLpNum-monthCdLpNum_zj},
+								]
+							}
+						]
+						
 
 					} else {
 						console.log('数据加载失败')
@@ -265,8 +334,8 @@
 							this.selerAllUserInfo[rid] = res.monthViews;
 							this.selerUserInfoData(res.monthViews);
 						}
-					}).catch(xhr => {
-
+					}).catch(err => {
+						
 					})
 				}
 			},
@@ -281,9 +350,9 @@
 					monthsdlpnum = 0,
 					monthsdmpnum = 0,
 					monthcdlpnum = 0,
-					monthcdmpnum = 0; //本月数据
-				let daydata = {},
-					monthdata = {}; //今日数据
+					monthcdmpnum = 0;//本月数据
+				let daydata = {},//今日数据
+					monthdata = {}; 
 				let selerUserInfo = {
 					columns: ['日期', '接单', '卖家退单', '刷单', '买家退单'],
 					rows: []
@@ -318,6 +387,7 @@
 					monthsdmpnum += item.tdsdmpnum;
 					monthcdlpnum += item.tdcdlpnum;
 					monthcdmpnum += item.tdcdmpnum;
+					
 
 				});
 				Object.assign(monthdata, {
@@ -437,4 +507,6 @@
 
 <style scoped>
 	@import url("../../../../assets/css/summary.css");
+	.sd-detail-info{padding:10px;}
+	
 </style>

@@ -33,9 +33,8 @@ axios.interceptors.response.use(result=>{
 //封装Get请求
 export const get=(url,params={})=>{
 	return new Promise((resolve,reject)=>{
-		axios.get(url,{
-			params:params
-		}).then(res=>{console.log(res)
+		axios.get(url,{params})
+		.then(res=>{console.log(res)
 			resolve(res.data)
 		}).catch(err=>{
 			reject(err)

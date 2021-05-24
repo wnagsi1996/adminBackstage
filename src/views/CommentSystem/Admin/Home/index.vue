@@ -69,16 +69,16 @@
 				</el-col>
 				<el-col :span="4">
 					<div class="month-line public-statue">
-						<div class="buyer-order-desc">
+						<div class="buyer-order-desc" v-if="summarytotalData.length!=0">
 							<h4>本月刷单</h4>
 							<ul>
-								<li><span>中介：</span><span>免:10/留:0</span></li>
-								<li><span>个人：</span><span>免:10/留:0</span></li>
+								<li><span>中介：</span><span>{{summarytotalData[0].sdnum_zj}}</span></li>
+								<li><span>个人：</span><span>{{summarytotalData[0].sdnum-summarytotalData[0].sdnum_zj}}</span></li>
 							</ul>
 							<h4 class="back">本月退单</h4>
 							<ul>
-								<li><span>中介：</span><span>免:10/留:0</span></li>
-								<li><span>个人：</span><span>免:10/留:0</span></li>
+								<li><span>中介：</span><span>{{summarytotalData[0].cdnum_zj}}</span></li>
+								<li><span>个人：</span><span>{{summarytotalData[0].cdnum-summarytotalData[0].cdnum_zj}}</span></li>
 							</ul>
 						</div>
 					</div>
@@ -181,6 +181,10 @@
 									<div class="usermonth-desc-data"><span>今日接单:</span>{{item.jdnum}}</div>
 									<div class="usermonth-desc-data"><span>本月刷单:</span>{{item.sdnum}}</div>
 									<div class="usermonth-desc-data"><span>本月撤单:</span>{{item.cdnum}}</div>
+									<div class="usermonth-desc-data"><span>本月中介刷单:</span>{{item.sdnum_zj}}</div>
+									<div class="usermonth-desc-data"><span>本月个人刷单:</span>{{item.sdnum-item.sdnum_zj}}</div>
+									<div class="usermonth-desc-data"><span>本月中介撤单:</span>{{item.cdnum_zj}}</div>
+									<div class="usermonth-desc-data"><span>本月个人撤单:</span>{{item.cdnum-item.cdnum_zj}}</div>
 									<div class="usermonth-desc-data"><span>本月损失:</span>{{item.outmoney}}</div>
 								</div>
 								<div class="usermonth-desc-right" v-if="item.plantnum!=0">
@@ -305,8 +309,8 @@
 					//console.log(res);
 					//买家端目标/卖家端目标
 					let	BuyermonthAims=0,SellermonthAims=0;
-					//接单/卖家退单/刷单/买家退单
-					let jdNum=0,tdNum=0,sdNum=0,cdNum=0;
+					//接单/卖家退单/刷单/买家退单/刷单中介/撤单中介
+					let jdNum=0,tdNum=0,sdNum=0,cdNum=0,sdNum_zj=0,cdNum_zj=0;
 					//买家完成百分比/卖家百分比
 					let BuyerPercentage,SelerPercentage;
 					
@@ -317,6 +321,8 @@
 						BuyermonthAims+=n.plantnum;
 						sdNum+=n.sdnum;
 						cdNum+=n.cdnum;
+						sdNum_zj+=n.sdnum_zj;
+						cdNum_zj+=n.cdnum_zj;
 						
 						//遍历买家目标
 						data.todaybuyerjdnums.forEach(nn=>{
@@ -334,7 +340,9 @@
 									'plantnum':n.plantnum,
 									'jdnum':nn.jdnum,
 									'sdnum':n.sdnum,
+									'sdnum_zj':n.sdnum_zj,
 									'cdnum':n.cdnum,
+									'cdnum_zj':n.cdnum_zj,
 									'outmoney':outmoneydata.toFixed(2),
 									'proportion':proportion<0?0:proportion
 								})
@@ -384,7 +392,9 @@
 					this.summarytotalData.push({
 						'aims':BuyermonthAims,
 						'sdnum':sdNum,
+						'sdnum_zj':sdNum_zj,
 						'cdnum':cdNum,
+						'cdnum_zj':cdNum_zj,
 						'BuyerPercentage':BuyerPercentage<0?0:BuyerPercentage
 					},{
 						'aims':SellermonthAims,
@@ -392,7 +402,7 @@
 						'tdnum':tdNum,
 						'SelerPercentage':SelerPercentage<0?0:SelerPercentage
 					});
-					
+					console.log(this.summarytotalData)
 					//构造5个模块的数据
 					const totaldatainfo={
 						'totalwaitmpordernum':data.totalwaitmpordernum,
@@ -403,9 +413,6 @@
 						'maxyfmoney':data.maxyfmoney
 					};
 					this.totalDataInfo=totaldatainfo;
-					//this.totalDataInfo.push()
-					
-					//this.summaryOrderData
 				}).catch(xhr=>{
 					console.log(xhr)
 				})
@@ -505,9 +512,8 @@
 						}
 					]
 					
-					this.summaryOrderData.push(todayData);
-					this.summaryOrderData.push(monthData);
-					
+					this.summaryOrderData.push(todayData,monthData);
+
 					this.monthLineData.columns=LineColumns;
 					this.monthLineData.rows=LineRow;
 					
