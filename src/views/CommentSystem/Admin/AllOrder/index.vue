@@ -31,6 +31,13 @@
 		       <el-option label="未留评" value="0"></el-option>
 		     </el-select>
 		   </el-form-item>
+		   <el-form-item label="是否自费">
+		     <el-select v-model="fromorder.ifzf" placeholder="">
+		       <el-option label="全部" value="-1"></el-option>
+		       <el-option label="是" value="1"></el-option>
+		       <el-option label="否" value="0"></el-option>
+		     </el-select>
+		   </el-form-item>
 		   <el-form-item label="订单状态">
 		     <el-select v-model="fromorder.orderStaus" placeholder="">
 				 <!--订单状态码：'',0,1,2,3,4,5,8,9,10,11,12-->
@@ -79,10 +86,12 @@
 		       <el-table-column prop="ztstr" label="订单状态" min-width="5%" />
 		       <el-table-column prop="cjsj" label="创建时间" min-width="6%" />
 		   		 <el-table-column prop="mjusername" label="放单人员" min-width="5%" />
-		   		 <el-table-column prop="fddate" label="放单时间" min-width="6%" />
+		   		 <!-- <el-table-column prop="fddate" label="放单时间" min-width="6%" /> -->
 		   		 <el-table-column prop="jduser" label="接单人员" min-width="5%" />
-		   		 <el-table-column prop="jddate" label="接单时间" min-width="6%" />
+		   		 <!-- <el-table-column prop="jddate" label="接单时间" min-width="6%" /> -->
 		   		 <el-table-column prop="xdOrderno" label="购买单号" min-width="8%" />
+				 <el-table-column prop="realproductdj_mj" label="卖家确认金额" min-width="6%" />
+				 <el-table-column prop="realproductfkmoney" :formatter="formatter" label="财务返款金额" min-width="6%" />
 		       <el-table-column fixed="right" label="操作" min-width="7%" >
 		         <template slot-scope="scope">
 		           <el-button @click="handleLogClick(scope.row.orderno)" type="text" size="small">查看详情</el-button>
@@ -131,6 +140,7 @@
 					jduser:'0',
 					orderTyoe:'-1',
 					reviewStatus:'-1',
+					ifzf:'-1', //是否自费
 					orderStaus:' ',
 					buyOrderNo:'',
 					date1:'',
@@ -184,7 +194,7 @@
 				}
 				this.loading=true;
 				let {size,current}=this.pagination;
-				let {OrderNo,orderTyoe,orderStaus,buyOrderNo,date1,date2,jduser,fduser,reviewStatus}=this.fromorder;
+				let {OrderNo,orderTyoe,orderStaus,buyOrderNo,date1,date2,jduser,fduser,reviewStatus,ifzf}=this.fromorder;
 				this.$api.getCPOrderDetailList({
 					"pageSize": size,                         //页面大小
 					"pageNum":current-1,   //页码
@@ -196,7 +206,8 @@
 					"sje": date2,
 					"mjuserid":jduser,
 					"mmjuserid": fduser,
-					"lpstate":reviewStatus
+					"lpstate":reviewStatus,
+					ifzf
 				}).then(res=>{
 					this.pagination.total=res.results;
 					this.tableData=res.rows;
@@ -246,6 +257,13 @@
 			//格式化序号
 			indexMethod(index){
 				 return index=index+1;
+			},
+			formatter(row, column, cellValue, index){
+				if(row.realproductfkmoney==''){
+					return Number(row.realproductdj_mj).toFixed(2)
+				}else{
+					return Number(row.realproductfkmoney).toFixed(2)
+				}
 			},
 			...mapActions([
 				'getSellerUserList',

@@ -236,11 +236,11 @@
 			},
 			//提交返款
 			rebate(orderno,state,usmoney){
-				this.Rebatedata={}
-				this.$api.getCPOrderDetailXDInfo({orderno}).then(res=>{
+				
+				this.$api.getCPOrderDetailXDInfo({orderno}).then(res=>{console.log(res)
 					if(res!=''){
 						if(res.fkimgurl=='' && res.fkaccount==''){  //返款二维码或者账户都为空直接弹出
-							this.Rebatedata.usmoney=usmoney;
+							this.Rebatedata={usmoney};
 							this.rebateshow(orderno);
 						}else{
 							this.Rebatedata={
@@ -250,7 +250,7 @@
 								fkimgurl:res.fkimgurl,
 								usmoney
 							}
-							if(state=='12'){  //返款被驳回也是直接弹出
+							 if(state=='12'){  //返款被驳回也是直接弹出
 								//this.Rebatedata=res;
 								this.rebateshow(orderno);
 							}else{
@@ -260,6 +260,7 @@
 									"skaccount":res.fkaccount,
 									"oldfkimgurl":'',
 									"sktype":res.fktype,
+									realproductfkmoney:usmoney,
 									"_img64":res.fkimgurl
 								}).then(resstr=>{
 									//console.log(resstr);

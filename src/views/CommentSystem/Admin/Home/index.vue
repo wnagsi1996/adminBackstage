@@ -185,6 +185,7 @@
 									<div class="usermonth-desc-data"><span>本月个人刷单:</span>{{item.sdnum-item.sdnum_zj}}</div>
 									<div class="usermonth-desc-data"><span>本月中介撤单:</span>{{item.cdnum_zj}}</div>
 									<div class="usermonth-desc-data"><span>本月个人撤单:</span>{{item.cdnum-item.cdnum_zj}}</div>
+									<div class="usermonth-desc-data"><span>自费金额:</span>{{item.savemoneydata}}</div>
 									<div class="usermonth-desc-data"><span>本月损失:</span>{{item.outmoney}}</div>
 								</div>
 								<div class="usermonth-desc-right" v-if="item.plantnum!=0">
@@ -306,7 +307,6 @@
 		methods:{
 			getdata(){
 				this.$api.getManagerTotalData().then(data=>{
-					//console.log(res);
 					//买家端目标/卖家端目标
 					let	BuyermonthAims=0,SellermonthAims=0;
 					//接单/卖家退单/刷单/买家退单/刷单中介/撤单中介
@@ -315,7 +315,6 @@
 					let BuyerPercentage,SelerPercentage;
 					
 					let selerInfo=[],buyerInfo=[];
-					
 					//遍历买家数据
 					data.curmonthsdtdnums.forEach(n=>{  
 						BuyermonthAims+=n.plantnum;
@@ -327,14 +326,21 @@
 						//遍历买家目标
 						data.todaybuyerjdnums.forEach(nn=>{
 							let outmoneydata=0;
+							let savemoneydata=0;
 							//遍历买家损失金额成员
 							data.outmoneydata.forEach(nnn=>{
 								if (nnn.userid == n.userid){
-									outmoneydata = eval(nnn.userdata);
+									outmoneydata = Number(nnn.userdata);
+								}
+							})
+							//遍历买家自费金额成员
+							data.savemoneydata.forEach(nnn=>{
+								if (nnn.userid == n.userid){
+									savemoneydata = Number(nnn.userdata);
 								}
 							})
 							if (n.username == nn.username) {
-								let proportion=eval(((n.sdnum-n.cdnum)/n.plantnum*100).toFixed(2));
+								let proportion=Number(((n.sdnum-n.cdnum)/n.plantnum*100).toFixed(2));
 								buyerInfo.push({
 									'username':n.username,
 									'plantnum':n.plantnum,
@@ -344,6 +350,7 @@
 									'cdnum':n.cdnum,
 									'cdnum_zj':n.cdnum_zj,
 									'outmoney':outmoneydata.toFixed(2),
+									'savemoneydata':savemoneydata,
 									'proportion':proportion<0?0:proportion
 								})
 							}

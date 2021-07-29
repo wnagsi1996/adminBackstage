@@ -22,6 +22,13 @@
 		  <el-form-item label="去向个人">
 		    <el-input v-model="fromorder.txtbuyer" placeholder=""></el-input>
 		  </el-form-item>
+		  <el-form-item label="是否自费">
+			<el-select v-model="fromorder.ifzf" placeholder="">
+			  <el-option label="全部" value="-1"></el-option>
+			  <el-option label="是" value="1"></el-option>
+			  <el-option label="否" value="0"></el-option>
+			</el-select>
+		  </el-form-item>
 		  <el-form-item label="接单时间">
 		      <el-col :span="11">
 		        <el-form-item prop="date1">
@@ -50,7 +57,7 @@
 						 <copyorderno :orderno="scope.row.orderno" />  
 					 </template>
 				 </el-table-column>
-				 <el-table-column prop="rid" label="RID" min-width="3%">
+				 <el-table-column prop="rid" label="RID" min-width="4%">
 				 	<template slot-scope="scope">
 				 		<p>is{{scope.row.rid}}</p> 
 				 	</template>
@@ -73,7 +80,7 @@
 						<i v-if="scope.row.fkimgurl!=''" class="el-icon-picture-outline fkIMG" @click="showReviewImg(scope.row.fkimgurl)"></i>
 					</template>
 				</el-table-column>
-			    <el-table-column prop="ordertypestr" label="订单类别" min-width="6%" >
+			    <el-table-column prop="ordertypestr" label="订单类别" min-width="4%" >
 					<template slot-scope="scope">
 						<template v-if="scope.row.lpimgurl!='' || scope.row.lpurl!=''">
 							<p v-if="scope.row.lpimgurl!='' || scope.row.lpurl==''">{{scope.row.ordertypestr}} <i @click="showReviewImg(scope.row.lpimgurl)" class="i-pointer el-icon-picture"></i></p>
@@ -90,11 +97,11 @@
 				</el-table-column>
 				 <el-table-column prop="zjname" label="去向（中介或个人）" min-width="5%" />
 <!-- 				 <el-table-column prop="sktypestr" label="返款渠道" min-width="5%" />
-				 <el-table-column prop="fkaccount" label="返款账号" min-width="5%" />
-				 <el-table-column prop="realproductdj" label="买家提供价格" min-width="5%" />
-				 <el-table-column prop="realproductdj_mj" label="卖家核实价格" min-width="5%" /> -->
+				 <el-table-column prop="fkaccount" label="返款账号" min-width="5%" /> -->
+				 <el-table-column prop="realproductfkmoney" label="实际返款金额" min-width="4%" />
+				 <el-table-column prop="realproductdj_mj" label="卖家核实价格" min-width="4%" />
 				 <el-table-column prop="jddate" label="接单时间" min-width="8%" />
-				 <el-table-column prop="xdOrderno" label="购买单号" min-width="5%" />
+				 <el-table-column prop="xdOrderno" label="购买单号" min-width="8%" />
 			    <el-table-column fixed="right" label="操作" min-width="10%" >
 			      <template slot-scope="scope">
 			       <el-button v-if="scope.row.zt=='1'" @click="review(scope.row.orderno,'1',scope.row.realprice)" type="text" size="small">接单</el-button>
@@ -166,6 +173,7 @@
 					xdorderno:'',
 					orderType:'-1',
 					agent:'-1',
+					ifzf:'-1',
 					txtbuyer:'',
 					date1:'',
 					date2:''
@@ -222,24 +230,23 @@
 					}
 				}
 				this.loading=true;
-				let {OrderNo,xdorderno,agent,orderType,date1,date2,txtbuyer}=this.fromorder;
-				this.axios.get("/Handler/CPManageSystem.ashx?cmd=getCPOrderDetailList",{
-					params:{
-						"pageSize": this.pagination.size,                         //页面大小
-						"pageNum":this.pagination.current-1,   //页码
-						"orderno": OrderNo,
-						"xdorderno":xdorderno,
-						"zjID": agent,
-						"iflp": orderType,
-						"sjs":date1,
-						"sje": date2,
-						"buyer": txtbuyer,
-						"state":'2,3,4,5,8,9,12,13'
-					}
+				let {OrderNo,xdorderno,agent,orderType,date1,date2,txtbuyer,ifzf}=this.fromorder;
+				this.$api.getCPOrderDetailList({
+					"pageSize": this.pagination.size,                         //页面大小
+					"pageNum":this.pagination.current-1,   //页码
+					"orderno": OrderNo,
+					"xdorderno":xdorderno,
+					"zjID": agent,
+					"iflp": orderType,
+					"sjs":date1,
+					"sje": date2,
+					"buyer": txtbuyer,
+					"ifzf":ifzf,
+					"state":'2,3,4,5,8,9,12,13'
 				}).then(res=>{
 					//console.log(res);
-					this.pagination.total=res.data.results;
-					this.tableData=res.data.rows;
+					this.pagination.total=res.results;
+					this.tableData=res.rows;
 					this.loading=false;
 				}).catch(xhr=>{
 					console.log(xhr);

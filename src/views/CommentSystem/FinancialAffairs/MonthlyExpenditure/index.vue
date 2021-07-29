@@ -140,7 +140,7 @@
 				if(date2==null){
 					this.fromorder.date2=date2=''
 				}
-				let {size:current}=this.pagination;
+				let {size,current}=this.pagination;
 				this.$api.getMonthOutLayList({
 					"pageSize": size,                         //页面大小
 					"pageNum":current-1,   //页码

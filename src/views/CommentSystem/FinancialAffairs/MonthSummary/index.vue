@@ -120,6 +120,10 @@
 									<p>损失金额</p>
 									<span>{{item[16]}}</span>
 								</li>
+								<li>
+									<p>自费金额</p>
+									<span>{{item[17]}}</span>
+								</li>
 								<!-- <li>
 									<p>薪资</p>
 									<span class="wage-txt">{{item[17]}}</span>
@@ -237,7 +241,8 @@
 				buyerUserList:{},//买家端人员列表
 				buyerUserListInfo:[] ,//买家端人员详细数据,
 				sellerUserId:'',  //选中卖家端用户id
-				buyerUserId:''  //选中买家端用户id
+				buyerUserId:''  ,//选中买家端用户id
+				zfMoneyTotal:0  //自费总金额
 			}
 		},
 		created() {
@@ -251,8 +256,9 @@
 			nowMonth = nowMonth < 9 ? "0" + nowMonth : nowMonth;
 			let month = nowYear + "-" + nowMonth;
 			this.month=month;
-			this.getdata1(month)
 			this.getdata2(month)
+			
+			
 			this.getSelerUser();
 			this.getBuyerUser();
 		},
@@ -320,8 +326,8 @@
 							'txt':`单数：${data.monthbcjnum }`
 						},
 						{
-							'title':'本月损失金额',
-							'money':outmoney
+							'title':'本月损失(人民币)/自费金额(美元)',
+							'money':`${outmoney} / ${this.zfMoneyTotal}`
 						}
 					];
 					this.monthfince=monthfince;
@@ -334,10 +340,12 @@
 				this.$api.getCWTotalMonthData2({month}).then(res=>{
 					//console.log(res);
 					let sellerUserData=[];
+					
 					res.sellerdata.forEach(item=>{
 						let attr=item.userdata.split(',');
 						
 						let outmoney=0;
+						
 						res.outmoneydata.forEach(attrdata=>{
 							if(attrdata.userid==item.userid){
 								outmoney=eval(attrdata.userdata).toFixed(2);
@@ -381,90 +389,30 @@
 					this.selerUserData=sellerUserData;
 					
 					let buyerUserData=[];
+					var zfMoneyTotal=0
 					res.buyerdata.forEach(item=>{
 						let attr=item.userdata.split(',');
 						
 						let outmoney=0;
+						let savemoneydata=0;
 						res.outmoneydata.forEach(attrdata=>{
 							if(attrdata.userid==item.userid){
-								outmoney=eval(attrdata.userdata).toFixed(2);
+								outmoney=Number(attrdata.userdata).toFixed(2);
 							}
 						})
-						attr.push(outmoney);
-						
-						// //计算薪资
-						// let zjlpnum = attr[9] - attr[11];
-						// let zjmpnum = attr[8] - attr[10];
-						// let zjtotalnum = zjlpnum + zjmpnum;   //计算总的中介刷单数量
+						res.savemoneydata.forEach(attrdata=>{
+							if(attrdata.userid==item.userid){
+								savemoneydata=Number(attrdata.userdata).toFixed(2);
+								zfMoneyTotal+=Number(savemoneydata);
+							}
+						})
+						attr.push(outmoney,savemoneydata);
 
-						// let grlpnum = attr[13] - attr[15];
-						// let grmpnum = attr[12] - attr[14];
-						// let grtotalnum = grlpnum + grmpnum;   //计算总的个人刷单数量
-
-						// let convertlp = 0;  //换算后的个人留评数量
-						// let converzjlp = 0;  //换算后的中介留评数量
-						// let converzjlptotal = 0;  //原有中介留评数量加换算后的中介留评数量
-						// let totalnum = 0;
-						// let showtxt = "";
-						// let mpmoney = 0;
-						// let lpmoney = 0;
-						// if (zjtotalnum > grtotalnum) {
-						// 	convertlp = 4.15 / 11.625 * grmpnum; 
-						// 	converzjlp = 11.625 / 2.713 * (grlpnum + convertlp); 
-						// 	converzjlptotal = zjtotalnum + converzjlp;
-						// 	totalnum = converzjlptotal + zjmpnum;
-
-						// 	if (totalnum < 972) {
-						// 		showtxt = "有底薪方案"
-						// 	} else if (972 <= totalnum < 1500) {
-						// 		mpmoney = zjmpnum * 0.97;
-						// 		lpmoney = converzjlptotal * 2.713;
-						// 	} else if (1500 <= totalnum < 1999) {
-						// 		mpmoney = zjmpnum * 1;
-						// 		lpmoney = converzjlptotal * 2.8;
-						// 	} else if (2000 <= totalnum < 2999) {
-						// 		mpmoney = zjmpnum * 1.03;
-						// 		lpmoney = converzjlptotal * 2.888;
-						// 	} else if (3000 <= totalnum < 4999) {
-						// 		mpmoney = zjmpnum * 1.06;
-						// 		lpmoney = converzjlptotal * 2.975;
-						// 	} else {
-						// 		mpmoney = zjmpnum * 1.09;
-						// 		lpmoney = converzjlptotal * 3.063;
-						// 	}
-						// } else {
-						// 	convertlp = 0.97 / 2.713 * zjmpnum;
-						// 	converzjlp = 11.625 / 2.713 * (zjlpnum + convertlp);
-						// 	converzjlptotal = grlpnum + converzjlp;
-						// 	totalnum = converzjlptotal + grmpnum;
-						// 	if (totalnum < 344) {
-						// 		showtxt = "有底薪方案";
-						// 	} else if (344 <= totalnum <= 500) {
-						// 		mpmoney = grmpnum * 4.15;
-						// 		lpmoney = converzjlptotal * 11.625;
-						// 	} else if (501 <= totalnum <= 666) {
-						// 		mpmoney = grmpnum * 4.29;
-						// 		lpmoney = converzjlptotal * 12;
-						// 	} else if (667 <= totalnum <= 999) {
-						// 		mpmoney = grmpnum * 4.42;
-						// 		lpmoney = converzjlptotal * 12.375;
-						// 	} else if (1000 <= totalnum <= 1666) {
-						// 		mpmoney = grmpnum * 4.55;
-						// 		lpmoney = converzjlptotal * 12.75;
-						// 	} else {
-						// 		mpmoney = grmpnum * 4.69;
-						// 		lpmoney = converzjlptotal * 13.125;
-						// 	}
-						// }
-
-						// if (showtxt == "") {
-						// 	showtxt = mpmoney + lpmoney;
-						// 	showtxt = eval(showtxt).toFixed(2);
-						// }
-						// attr.push(showtxt);
-						
 						buyerUserData.push(attr);
 					});
+					
+					this.zfMoneyTotal=zfMoneyTotal;
+					this.getdata1(month)
 					this.buyerUserData=buyerUserData;
 					this.loading=false;
 				}).catch(xhr=>{

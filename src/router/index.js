@@ -437,7 +437,7 @@ export const asyncRoutes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',//history
+  // mode: 'history',//history
   base: process.env.NODE_ENV === "production" ? "main" : "/",
   routes: constRouter
 })

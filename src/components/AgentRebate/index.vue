@@ -175,11 +175,13 @@
 			submithReate(agent){
 				this.$refs[agent].validate((valid) => {
 				  if (valid) {
+					  
 					  let {orderyj,reviewyj,totalyj}=this.agent
-					  if(orderyj=='' || reviewyj==''){
+					  if(!Number.isFinite(orderyj) || !Number.isFinite(reviewyj)){
 						  this.$message.warning('返款金额不能为空,没有则填写0')
 						  return false;
 					  }else{
+						  
 						  this.btnLoading=true;
 						  this.$api.getAgentOverDraftMaxMoney({
 							  zjid:this.rebate.agent,

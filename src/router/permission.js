@@ -10,7 +10,7 @@ import store from '../store/index'
 //import { getToken } from '@/utils/auth' // 从cookie获取令牌
 
 
-let isPC=()=>{     
+const isPC=()=>{     
 	var userAgentInfo = navigator.userAgent;     
 	var Agents = ["Android","iPhone","SymbianOS","Windows Phone","iPad","iPod"];     
 	var flag = true;     
@@ -30,6 +30,7 @@ router.beforeEach(async (to,from,next) => {
 	if(!isPC()){
 		if(to.path==='/login' && process.env.NODE_ENV === "production"){
 			window.location.href="/mmain"
+			// window.location.href="/mobileDist"
 		}
 	}
 	

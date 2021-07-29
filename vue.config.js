@@ -5,15 +5,13 @@ const resolve = function(dir) {
 
 const webpack=require('webpack')
 module.exports={
-	publicPath: process.env.NODE_ENV === "production" ? "/main" : "./",
-	outputDir:'main',
+    publicPath: process.env.NODE_ENV === "production" ? "/main" : "./",
+	 outputDir:'main',
 	productionSourceMap: false,  //在编译时不生成.map文件
-	// productionGzip: true,  //开启Gzip压缩
-	// productionGzipExtensions: ['js', 'css' ,'svg'],
 	devServer:{
 		proxy:{
 			'/Handler':{
-				target:'http://192.168.123.121',
+				target:'http://192.168.123.122',
 				changeOrigin:true,
 				pathRewrite:{
 					'^/Handler':''

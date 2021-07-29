@@ -158,24 +158,27 @@
 				  cancelButtonText: '取消',
 				}).then(async ()=>{
 					let newpass = Math.floor(Math.random() * 999999) + "";
+					let pass;
 					try{
 						let keystr=await this.$api.rsaKey();
 						if(keystr.rescode==0){
 							pass = cmdEncrypt(newpass, keystr.strPublicKeyExponent, keystr.strPublicKeyModulus);
+							
 						}else{
 							return ;
 						}
-						this.$api.modifyCPUserPassword().then(res=>{
+						
+						this.$api.modifyCPUserPassword({userid,newpass:pass}).then(res=>{
 							if(res.rescode>0){
 								this.$alert('重置成功，新密码:'+newpass, '新密码', {
 								  confirmButtonText: '确定'
 								  })
 							}else{
-								this.$message.warning('重置密码失败!')
+								this.$message.warning('重置密码失败2!')
 							}
 						})
 					}catch(e){
-						this.$message.warning('重置密码失败!')
+						this.$message.warning('重置密码失败1!')
 					}
 				}).catch(()=>{
 					

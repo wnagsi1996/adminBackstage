@@ -48,7 +48,7 @@
 			<el-col :span="4">
 				<div class="one-today public-statue">
 					<div class="today-title">
-						<h5>当月刷单</h5>
+						<h5>当月买家端刷单</h5>
 					</div>
 					<div class="today-desc">
 						<div class="sd-detail" v-if="orderinfo.length>0">
@@ -61,7 +61,7 @@
 			<el-col :span="4">
 				<div class="one-today public-statue">
 					<div class="today-title">
-						<h5>当月退单</h5>
+						<h5>当月买家端撤单</h5>
 					</div>
 					<div class="today-desc">
 						<div class="sd-detail" v-if="orderinfo.length>0">
@@ -273,14 +273,14 @@
 								]
 							},
 							{
-								name:'中介退单',
+								name:'中介撤单',
 								desc:[
 									{text:'免评',value:monthCdMpNum_zj},
 									{text:'留评',value:monthCdLpNum_zj},
 								]
 							},
 							{
-								name:'个人退单',
+								name:'个人撤单',
 								desc:[
 									{text:'免评',value:monthCdMpNum-monthCdMpNum_zj},
 									{text:'留评',value:monthCdLpNum-monthCdLpNum_zj},

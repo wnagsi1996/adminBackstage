@@ -124,42 +124,38 @@
 					}).catch(xhr=>{
 						this.$message.warning('获取用户信息失败!')
 					})
-					this.user={
-						pass:'1',
-						pass1:'1'
-					}
 				}else{
-					this.user={
+					Object.assign(this.user,{
 						pass:'',
 						pass1:''
-					}
+					});
 				}
+				
 			},
 			// 提交
 			submitForm(user){
 				this.$refs[user].validate((valid) => {
 				  if (valid) {
-					let pass,pass1,userid=this.userid;
+					let {pass,pass1}=this.user;
 					let uid=0;  //创建
 					this.btnLoading=true;
-					if(userid!=''){
-						uid=userid;
+					if(this.userID!=''){
+						uid=this.userID;
 						pass="1",
 						pass1="1",
 						this.createAccount(uid,pass,pass1)
 					}else{
-						let userPass=this.user.pass;
 						//获取后台传过来的公钥
 						this.$api.rsaKey().then(res=>{
 							if(res.rescode==0){
-								pass = cmdEncrypt(userPass, res.strPublicKeyExponent, res.strPublicKeyModulus);
-								pass1 = cmdEncrypt(userPass, res.strPublicKeyExponent, res.strPublicKeyModulus);
-								if(pass!='' && pass1!=''){
-									this.createAccount(uid,pass,pass1)
-								}else{
-									this.$message.warning('创建加密数据失败!')
-									this.btnLoading=false;
-								}
+								let userPass = cmdEncrypt(pass, res.strPublicKeyExponent, res.strPublicKeyModulus);
+								// pass1 = cmdEncrypt(userPass, res.strPublicKeyExponent, res.strPublicKeyModulus);
+								//if(pass!='' && pass1!=''){
+									this.createAccount(uid,userPass,userPass)
+								// }else{
+								// 	this.$message.warning('创建加密数据失败!')
+								// 	this.btnLoading=false;
+								// }
 							}else{
 								this.$message.warning('创建加密数据失败!')
 								this.btnLoading=false;
@@ -176,7 +172,7 @@
 				});
 			},
 			createAccount(uid,password,surepassword){
-				let {Username,Loginname,Roleid,Remark}=this.user;
+				const {Username,Loginname,Roleid,Remark}=this.user;
 				this.$api.addOrEditCPUser({
 					uid,
 					"username":Username,

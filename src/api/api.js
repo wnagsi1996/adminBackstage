@@ -422,7 +422,7 @@ const api={
 	},
 	//补退差价
 	comitMakeUpTopOrderMoney(params={}){
-		return get('/Handler/CPManageSystem.ashx?cmd=comitMakeUpTopOrderMoney',params)
+		return post('/Handler/CPManageSystem.ashx?cmd=comitMakeUpTopOrderMoney',params)
 	},
 	//获取记事本
 	getCPTopWorkLog(params={}){
@@ -546,7 +546,7 @@ const api={
 	},
 	//显示补退差价
 	getSCOrderListBT(params={}){
-		return get('/Handler/CPManageSystem.ashx?cmd=getCWTotalMonthData2',params)
+		return get('/Handler/CPManageSystem.ashx?cmd=getSCOrderListBT',params)
 	}
 	
 }

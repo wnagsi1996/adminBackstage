@@ -1,5 +1,5 @@
 <template>
-	<el-form ref="rebate" :model="rebate" :rules="rebateRule" label-width="80px" label-position="top">
+	<el-form ref="rebate" :model="rebate" label-width="80px" label-position="top">
 		<el-row :gutter="20">
 		  <el-col :span="12">
 			  <el-form-item label="渠道" prop="channel">
@@ -11,6 +11,11 @@
 		  <el-col :span="12">
 			  <el-form-item label="账号" prop="account">
 				<el-input v-model="rebate.account"></el-input>
+			  </el-form-item>
+		  </el-col>
+		  <el-col :span="12">
+			  <el-form-item label="返款金额(美金)" prop="pricemj">
+				<el-input v-model="rebate.pricemj"></el-input>
 			  </el-form-item>
 		  </el-col>
 		  <el-col :span="12" v-show="rebate.channel!='3'">
@@ -69,18 +74,19 @@
 				rebate:{
 					channel:'',
 					account:'',
+					pricemj:'',//美金
 					price:'',
 					remark:'',
 					imgsrc:''
 				},
-				rebateRule:{
-					channel:[
-						{required: true, message: '请选择收款渠道', trigger: 'change' }
-					],
-					price:[
-						{ pattern:/^\d+(\.\d+)?$/, message: '请产品客单价必须为数字' }
-					]
-				},
+				// rebateRule:{
+				// 	channel:[
+				// 		{required: true, message: '请选择收款渠道', trigger: 'change' }
+				// 	],
+				// 	price:[
+				// 		{ pattern:/^\d+(\.\d+)?$/, message: '产品客单价必须为数字' }
+				// 	]
+				// },
 				btnLoading:false,
 				oldimg:'',
 				paymentType
@@ -93,8 +99,8 @@
 			submitForm(rebate){
 				this.$refs[rebate].validate((valid) => {
 				  if (valid) {
-					  let {channel,usmoney}=this.Rebatedata;
-					  if(channel!='3'){
+					  let {usmoney}=this.Rebatedata;
+					  if(this.rebate.channel!='3'){
 						   let {price}=this.rebate
 						   let firstmoney = (Number(usmoney) * 7) * 1.1;
 						   let lastmoney = (Number(usmoney) * 7) * 0.9;
@@ -120,7 +126,29 @@
 			},
 			//提交返款FN
 			uploadRebate(){
-				let {account,imgsrc,channel,remark,price}=this.rebate;
+				let {account,imgsrc,channel,remark,price,pricemj}=this.rebate;
+				if(channel==''){
+					this.$message.warning('请选择收款渠道!')
+					return;
+				}
+				let reg=/^\d+(\.\d+)?$/;
+				if(channel!=3){
+					if(!reg.test(price)){
+						this.$message.warning('客单价必须为数字!')
+						return;
+					}
+				}
+				
+				if(pricemj==''){
+					this.$message.warning('客单价（美金）必填!')
+					return;
+				}else if(!reg.test(pricemj)){
+					this.$message.warning('客单价（美金）必须为数字!')
+					return;
+				}else if(pricemj<0 || pricemj>this.Rebatedata.usmoney){
+					this.$message.warning('客单价（美金）不能小于0获取大于产品费!')
+					return;
+				}
 				if(account=="" && imgsrc=="" ){
 					this.$message.warning('收款账户或二维码不能都为空')
 				}else{
@@ -135,6 +163,7 @@
 					  "skaccount":account,
 					  "oldfkimgurl":this.oldimg,
 					  "sktype":channel,
+					  "realproductfkmoney":pricemj,
 					  "_img64":imgsrc
 				  }).then(res=>{
 					console.log(res);
@@ -161,15 +190,16 @@
 			},
 			//有传数据来的时候赋值
 			getdata(){
-				let Rebatedata=this.Rebatedata
+				Object.keys(this.rebate).forEach(key =>{this.rebate[key ]=''});
+				let Rebatedata=this.Rebatedata;
 				if(Object.keys(Rebatedata).length>1){
-					let {fktype,fkaccount,fkimgurl,fkremark}=Rebatedata;
+					let {fktype,fkaccount,fkimgurl,fkremark,usmoney}=Rebatedata;
 					let newfkremark='',price='';
 					if(fkremark!=''){
 						let fkremarkrmb = fkremark.lastIndexOf("(");
 						if (fkremarkrmb != -1) {
 							newfkremark = fkremark.substring(0, fkremarkrmb);
-							price = (fkremark.substring(newfkremark).match(/\d+(.\d+)?/g)).toString();
+							price = (fkremark.substring(fkremarkrmb).match(/\d+(.\d+)?/g)).toString();
 						} else
 							newfkremark = fkremark;
 					}
@@ -178,10 +208,12 @@
 						account:fkaccount,
 						imgsrc:fkimgurl,
 						remark:newfkremark,
+						pricemj:usmoney,
 						price
 					}
 					this.oldimg=fkimgurl;
 				}
+				Object.assign(this.rebate,{pricemj:this.Rebatedata.usmoney})
 			}
 		},
 		watch:{

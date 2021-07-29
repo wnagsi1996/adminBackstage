@@ -49,7 +49,7 @@
 		},
 		methods:{
 			submitForm(order){
-				this.order.price=this.rowData.price
+				//this.order.price=this.rowData.price
 				this.$refs[order].validate((valid) => {
 				  if (valid) {
 					this.btnLoading=true;
