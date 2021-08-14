@@ -11,7 +11,7 @@ module.exports={
 	devServer:{
 		proxy:{
 			'/Handler':{
-				target:'http://192.168.123.122',
+				target:'http://192.168.1.5',
 				changeOrigin:true,
 				pathRewrite:{
 					'^/Handler':''

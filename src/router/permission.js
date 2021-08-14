@@ -83,7 +83,7 @@ router.beforeEach(async (to,from,next) => {
 						next({...to,path:'/404',replace: true});
 					}
                    
-                    // console.log(hasRoles)
+                    console.log(111)
                     // 继续路由切换,确保addRoutes完成
                    
                    	

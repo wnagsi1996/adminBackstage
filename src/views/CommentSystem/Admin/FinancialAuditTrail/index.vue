@@ -181,7 +181,7 @@
 					}
 				}
 				this.loading=true;
-				let {OrderNo,channel,currency,orderStaus,date1,date2}=this.fromorder;
+				let {OrderNo,channel,currency,orderStaus,date1,date2,orderType}=this.fromorder;
 				let {size,current}=this.pagination
 				this.$api.getCWOrderDetailList({
 					"pageSize": size,                         //页面大小
@@ -195,7 +195,8 @@
 					"sje": date2,
 					"xdOrderno":'',
 					"bustype":orderType,
-					"ifauto":-1
+					"ifauto":-1,
+					"rattype":-1
 				}).then(res=>{
 					console.log(res);
 					if(res.rows.length!=0){

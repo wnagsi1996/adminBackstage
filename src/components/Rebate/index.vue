@@ -145,8 +145,8 @@
 				}else if(!reg.test(pricemj)){
 					this.$message.warning('客单价（美金）必须为数字!')
 					return;
-				}else if(pricemj<0 || pricemj>this.Rebatedata.usmoney){
-					this.$message.warning('客单价（美金）不能小于0获取大于产品费!')
+				}else if(pricemj<0 || Number(pricemj)>Number(this.Rebatedata.usmoney)){
+					this.$message.warning('客单价（美金）不能小于0或者大于产品费!')
 					return;
 				}
 				if(account=="" && imgsrc=="" ){

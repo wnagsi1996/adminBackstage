@@ -188,32 +188,34 @@
 			},
 			//添加/编辑产品
 			setProduct(orderno='',title=0){
-				let state=this.orderInfo.state;
-				let orderState='',ptitle='';
-				this.puborderno=orderno;
-				if(title==0){
-					ptitle='添加产品';
-					if(state=='0'|| state=='3'){
-						orderState=1; //正常添加1  追加产品0
+				if(Object.keys(this.orderInfo).length>0){
+					let {state}=this.orderInfo;
+					let orderState='',ptitle='';
+					this.puborderno=orderno;
+					if(title==0){
+						ptitle='添加产品';
+						if(state=='0'|| state=='3'){
+							orderState=1; //正常添加1  追加产品0
+						}else{
+							orderState=0; //正常添加1  追加产品0
+						}
 					}else{
-						orderState=0; //正常添加1  追加产品0
+						ptitle='编辑产品';
 					}
-				}else{
-					ptitle='编辑产品';
+					let addProductItem=this.addProductItem;
+					if(addProductItem==null){
+						addProductItem=this.addProductItem=()=>import('@/components/AddProduct/AddProductItem.vue')
+					}
+					let obj={
+						title:ptitle,
+						toggle:true,
+						width:'70%',
+						dialogContent:addProductItem
+					};
+					
+					Object.assign(this.dialogAddProduct,obj);
+					Object.assign(this.dialogAddProduct.dataObj,{orderState});
 				}
-				let addProductItem=this.addProductItem;
-				if(addProductItem==null){
-					addProductItem=this.addProductItem=()=>import('@/components/AddProduct/AddProductItem.vue')
-				}
-				let obj={
-					title:ptitle,
-					toggle:true,
-					width:'70%',
-					dialogContent:addProductItem
-				};
-				
-				Object.assign(this.dialogAddProduct,obj);
-				Object.assign(this.dialogAddProduct.dataObj,{orderState});
 			},
 			//退单
 			backOrder(orderno){
